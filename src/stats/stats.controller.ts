@@ -1,9 +1,17 @@
 import { Controller, Get } from '@nestjs/common';
+import PlatformDataEntity from '../models/PlatformDataEntity';
 
 @Controller('stats')
 export class StatsController {
-    @Get()
-    findAll(): string {
-        return 'This action returns all stats';
-    }
+  @Get()
+  findAll(): PlatformDataEntity {
+    return {
+      countStats: [
+        {
+          count: 1,
+          inputNumber: 2,
+        },
+      ],
+    };
+  }
 }
