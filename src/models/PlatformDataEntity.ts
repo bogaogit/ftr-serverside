@@ -10,5 +10,6 @@ export class ErrorData {
 
 export default class PlatformDataEntity {
   public countStats: CountStats[] = [];
+  public message: string;
+  public timestamp: Date;
 }
-
