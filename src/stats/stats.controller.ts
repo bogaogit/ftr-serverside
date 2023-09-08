@@ -9,7 +9,7 @@ export class StatsController {
       countStats: [
         {
           count: 1,
-          inputNumber: 2,
+          inputNumber: Math.random(),
         },
       ],
     };
