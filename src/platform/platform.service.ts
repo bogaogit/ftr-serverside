@@ -1,13 +1,21 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import InMemoryDbStore, { CountStats } from '../models/InMemoryDbStore';
+import { Injectable } from '@nestjs/common';
+import InMemoryDbStore, {
+  CountStats,
+  ResponseDataEntity,
+  UpdateStatsRequestData,
+} from '../models/InMemoryDbStore';
 
-@Controller('stats')
-export class StatsController {
+@Injectable()
+export class PlatformService {
   inMemoryDbStore: InMemoryDbStore = {
     countStats: [],
   };
 
   fibonacciNumbers: number[] = [];
+
+  constructor() {
+    this.generateFibonacciSequence();
+  }
 
   fibonacciNumber(n) {
     if (n == 0) {
@@ -28,12 +36,7 @@ export class StatsController {
     }
   }
 
-  constructor() {
-    this.generateFibonacciSequence();
-  }
-
-  @Get('/:userName')
-  findAll(@Param('userName') userName: string): InMemoryDbStore {
+  getCountStatsData(userName: string): ResponseDataEntity {
     let message = '';
     const countStats = this.inMemoryDbStore.countStats.filter(
       (e) => e.userName === userName,
@@ -51,12 +54,7 @@ export class StatsController {
     };
   }
 
-  @Post()
-  update(@Body() body: { userName: string; userInput: number }): {
-    countStats: CountStats[];
-    message: string;
-    timestamp: Date;
-  } {
+  updateStatsData(body: UpdateStatsRequestData): ResponseDataEntity {
     const userInput = body.userInput;
     const constStats = this.inMemoryDbStore.countStats.find(
       (e: CountStats) =>
