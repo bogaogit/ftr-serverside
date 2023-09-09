@@ -1,12 +1,10 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
-import PlatformDataEntity, { CountStats } from '../models/PlatformDataEntity';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import InMemoryDbStore, { CountStats } from '../models/InMemoryDbStore';
 
 @Controller('stats')
 export class StatsController {
-  platformData: PlatformDataEntity = {
+  inMemoryDbStore: InMemoryDbStore = {
     countStats: [],
-    message: undefined,
-    timestamp: undefined,
   };
 
   fibonacciNumbers: number[] = [];
@@ -24,7 +22,7 @@ export class StatsController {
   generateFibonacciSequence() {
     this.fibonacciNumbers = [];
 
-    const n = 10;
+    const n = 17;
     for (let i = 0; i < n; i++) {
       this.fibonacciNumbers.push(this.fibonacciNumber(i));
     }
@@ -35,9 +33,11 @@ export class StatsController {
   }
 
   @Get('/:userName')
-  findAll(@Param('userName') userName: string): PlatformDataEntity {
+  findAll(@Param('userName') userName: string): InMemoryDbStore {
     let message = '';
-    const countStats = this.platformData.countStats.filter(e => e.userName === userName)
+    const countStats = this.inMemoryDbStore.countStats.filter(
+      (e) => e.userName === userName,
+    );
     const messageItems = countStats.map((countStat) => {
       return `${countStat.inputNumber}:${countStat.count}`;
     });
@@ -58,21 +58,21 @@ export class StatsController {
     timestamp: Date;
   } {
     const userInput = body.userInput;
-    const constStats = this.platformData.countStats.find(
+    const constStats = this.inMemoryDbStore.countStats.find(
       (e: CountStats) =>
         e.inputNumber === userInput && e.userName === body.userName,
     );
     if (constStats) {
       constStats.count++;
     } else {
-      this.platformData.countStats.push({
+      this.inMemoryDbStore.countStats.push({
         inputNumber: userInput,
         count: 1,
         userName: body.userName,
       });
     }
 
-    this.platformData.countStats.sort((a, b) => b.count - a.count);
+    this.inMemoryDbStore.countStats.sort((a, b) => b.count - a.count);
     let message = '';
 
     if (this.fibonacciNumbers.indexOf(userInput) >= 0) {
@@ -80,7 +80,7 @@ export class StatsController {
     }
 
     return {
-      countStats: this.platformData.countStats,
+      countStats: this.inMemoryDbStore.countStats,
       message: message,
       timestamp: new Date(),
     };
