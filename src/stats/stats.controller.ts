@@ -37,9 +37,11 @@ export class StatsController {
   @Get()
   findAll(): PlatformDataEntity {
     let message = '';
-    this.platformData.countStats.forEach((countStat) => {
-      message += `${countStat.inputNumber}:${countStat.count} `;
+    const messageItems = this.platformData.countStats.map((countStat) => {
+      return `${countStat.inputNumber}:${countStat.count}`;
     });
+
+    message = messageItems.join(', ');
 
     return {
       countStats: this.platformData.countStats,
