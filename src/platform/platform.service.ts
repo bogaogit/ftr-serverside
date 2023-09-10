@@ -54,10 +54,6 @@ export class PlatformService {
     };
   }
 
-  test() {
-   
-  }
-
   update(body: UpdateStatsRequestData): ResponseDataEntity {
     const userInput = body.userInput;
     const constStats = this.inMemoryDbStore.countStats.find(
