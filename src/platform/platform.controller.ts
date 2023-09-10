@@ -8,13 +8,13 @@ export class PlatformController {
 
   @Get('/:userName')
   findAll(@Param('userName') userName: string): ResponseDataEntity {
-    return this.platformService.getCountStatsData(userName);
+    return this.platformService.findAll(userName);
   }
 
   @Post()
   update(
     @Body() body: { userName: string; userInput: number },
   ): ResponseDataEntity {
-    return this.platformService.updateStatsData(body);
+    return this.platformService.update(body);
   }
 }

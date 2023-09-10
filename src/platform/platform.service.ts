@@ -36,7 +36,7 @@ export class PlatformService {
     }
   }
 
-  getCountStatsData(userName: string): ResponseDataEntity {
+  findAll(userName: string): ResponseDataEntity {
     let message = '';
     const countStats = this.inMemoryDbStore.countStats.filter(
       (e) => e.userName === userName,
@@ -54,7 +54,11 @@ export class PlatformService {
     };
   }
 
-  updateStatsData(body: UpdateStatsRequestData): ResponseDataEntity {
+  test() {
+   
+  }
+
+  update(body: UpdateStatsRequestData): ResponseDataEntity {
     const userInput = body.userInput;
     const constStats = this.inMemoryDbStore.countStats.find(
       (e: CountStats) =>

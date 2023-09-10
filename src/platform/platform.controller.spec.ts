@@ -1,18 +1,33 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { PlatformController } from './platform.controller';
+import { PlatformService } from './platform.service';
 
-describe('StatsController', () => {
+describe('PlatformController', () => {
   let controller: PlatformController;
+  let service: PlatformService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [PlatformController],
-    }).compile();
-
-    controller = module.get<PlatformController>(PlatformController);
+    service = new PlatformService();
+    controller = new PlatformController(service);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  describe('findAll', () => {
+    it('should return an array of count stats data', async () => {
+      const timeNow = new Date();
+      const result = {
+        countStats: [
+          {
+            inputNumber: 2,
+            count: 10,
+            userName: 'John',
+          },
+        ],
+        message: 'statistics',
+        timestamp: timeNow,
+      };
+      //@ts-ignore
+      jest.spyOn(service, 'findAll').mockImplementation(() => result);
+
+      expect(await controller.findAll('John')).toBe(result);
+    });
   });
 });
